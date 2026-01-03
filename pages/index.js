@@ -9,9 +9,9 @@ const addTodoForm = addTodoPopup.querySelector(".popup__form");
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
 
-const addTodoValidate = new FormValidator(addTodoForm, validationConfig);
+const addTodoValidator  = new FormValidator(addTodoForm, validationConfig);
 
-addTodoValidate.enableValidation();
+addTodoValidator .enableValidation();
 
 const openModal = (modal) => {
   modal.classList.add("popup_visible");

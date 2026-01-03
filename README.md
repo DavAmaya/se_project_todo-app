@@ -1,6 +1,6 @@
 # Simple Todo App
 
-Give a brief description of the project here. Feel free to give it a different name.
+This is a simple Todo App that allows you to enter your task with an optional due date, and as you go you can check off your task and when your list is complete you can delete all the tasks.
 
 ## Functionality
 
