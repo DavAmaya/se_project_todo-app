@@ -13,8 +13,8 @@ export class Todo {
       (this._name = data.name),
       (this._completed = data.completed),
       (this._date = data.date);
-    this._todoElement = this._getTemplate();
     this._selector = selector;
+    this._todoElement = this._getTemplate();
   }
 
   _getTemplate() {
@@ -29,7 +29,7 @@ export class Todo {
   _setEventListeners() {
     // Handle delete button
     this._todoDeleteBtn.addEventListener("click", () => {
-      todoElement.remove();
+      this._todoElement.remove();
     });
     // Handle checkbox changes
     this._todoCheckbox.addEventListener("click", () => {
@@ -70,6 +70,6 @@ export class Todo {
       })}`;
     }
 
-    return todoElement;
+    return this._todoElement;
   }
 }
