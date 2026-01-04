@@ -4,7 +4,14 @@ This is a simple Todo App that allows you to enter your task with an optional du
 
 ## Functionality
 
-Give a more detailed explanation of the project and its functionality.
+###View
+        -Shows a list of Todo to user with an option to create a new Todo, check off their Todo's and delete them.
+###Add Todo
+        -Create a new Todo with objective and an optional due date.
+###Checking Todo
+        -Abliity to check off the Todo once task are completed.
+###Deleting Todo
+        -Each Todo has their own delete button to delete them off the list the user views.
 
 ## Technology
 

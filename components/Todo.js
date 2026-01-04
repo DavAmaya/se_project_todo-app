@@ -14,7 +14,6 @@ export class Todo {
       (this._completed = data.completed),
       (this._date = data.date);
     this._selector = selector;
-    this._todoElement = this._getTemplate();
   }
 
   _getTemplate() {
@@ -26,24 +25,27 @@ export class Todo {
     return todoElement;
   }
 
+  _handleCheck = () => {
+    this._completed = !this._completed;
+    this._todoCheckbox.checked = this._completed;
+  };
+
+  _handleDelete = () => {
+    this._todoElement.remove();
+  };
+
   _setEventListeners() {
     // Handle delete button
     this._todoDeleteBtn.addEventListener("click", () => {
-      this._todoElement.remove();
+      this._handleDelete();
     });
     // Handle checkbox changes
     this._todoCheckbox.addEventListener("click", () => {
-      this._completed = !this._completed;
-      this._todoCheckbox.checked = this._completed;
+      this._handleCheck();
     });
   }
 
-  getView() {
-    this._setEventListeners();
-    return this._todoElement;
-  }
-
-  generateTodo() {
+  _generateNameEl() {
     this._todoName = this._todoElement.querySelector(".todo__name");
     this._todoCheckbox = this._todoElement.querySelector(".todo__completed");
     this._todoLabel = this._todoElement.querySelector(".todo__label");
@@ -51,16 +53,9 @@ export class Todo {
     this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
 
     this._todoName.textContent = this._name;
+  }
 
-    this._setEventListeners();
-
-    // Apply id and for attributes.
-    // The id will initially be undefined for new todos.
-    this._todoCheckbox.id = `todo-${this._id}`;
-    this._todoLabel.setAttribute("for", `todo-${this._id}`);
-
-    // If a due date has been set, parsing this it with `new Date` will return a
-    // number. If so, we display a string version of the due date in the todo.
+  _generateDateEl() {
     const dueDate = new Date(this._date);
     if (!isNaN(dueDate)) {
       this._todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
@@ -69,7 +64,20 @@ export class Todo {
         day: "numeric",
       })}`;
     }
+  }
 
+  _generateCheckboxEl() {
+    this._todoCheckbox.id = `todo-${this._id}`;
+    this._todoLabel.setAttribute("for", `todo-${this._id}`);
+  }
+
+  getView() {
+    this._todoElement = this._getTemplate();
+    this._generateNameEl();
+    this._generateDateEl();
+    this._generateCheckboxEl();
+    this._setEventListeners();
     return this._todoElement;
   }
+
 }

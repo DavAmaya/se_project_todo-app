@@ -21,6 +21,11 @@ const closeModal = (modal) => {
   modal.classList.remove("popup_visible");
 };
 
+const renderTodo = (data) => {
+  const todo = new Todo(data, "#todo-template");
+  todosList.append(todo.getView());
+};
+
 
 addTodoButton.addEventListener("click", () => {
   openModal(addTodoPopup);
@@ -42,13 +47,11 @@ addTodoForm.addEventListener("submit", (evt) => {
   const completed = false;
 
   const values = { name, date, id, completed};
-  const todo = new Todo(values, "#todo-template");
-  todosList.append(todo.generateTodo());
+  renderTodo(values);
   addTodoValidator.resetValidation();
   closeModal(addTodoPopup);
 });
 
 initialTodos.forEach((item) => {
-  const todo = new Todo(item, "#todo-template");
-  todosList.append(todo.generateTodo());
+  renderTodo(item);
 });
