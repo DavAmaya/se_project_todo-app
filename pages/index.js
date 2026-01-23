@@ -1,57 +1,25 @@
-import { initialTodos, validationConfig } from "../utils/constants.js";
+import { initialTodos, addTodoPopup, addTodoButton } from "../utils/constants.js";
 import { Todo } from "../components/Todo.js";
-import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
-import { FormValidator } from "../components/FormValidator.js";
+import PopupWithForm from "../components/PopupWithForm.js";
+import Section  from "../components/Section.js"
+import TodoCounter from "../components/TodoCounter.js";
 
-const addTodoButton = document.querySelector(".button_action_add");
-const addTodoPopup = document.querySelector("#add-todo-popup");
-const addTodoForm = addTodoPopup.querySelector(".popup__form");
-const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
-const todosList = document.querySelector(".todos__list");
+const todoCounter = new TodoCounter(initialTodos, ".counter__text");
 
-const addTodoValidator  = new FormValidator(addTodoForm, validationConfig);
+const todoList = new Section({
+  items: initialTodos,
+  renderer: (data) => {
+    const todosList = document.querySelector(".todos__list");
+    const todo = new Todo(data, "#todo-template", todoCounter);
+    todosList.append(todo.getView());
+  }
+}, ".todos__list", todoCounter);
 
-addTodoValidator.enableValidation();
 
-const openModal = (modal) => {
-  modal.classList.add("popup_visible");
-};
-
-const closeModal = (modal) => {
-  modal.classList.remove("popup_visible");
-};
-
-const renderTodo = (data) => {
-  const todo = new Todo(data, "#todo-template");
-  todosList.append(todo.getView());
-};
-
+const addTodoForm = new PopupWithForm(addTodoPopup, (element) => todoList.addItem(element));
 
 addTodoButton.addEventListener("click", () => {
-  openModal(addTodoPopup);
+  addTodoForm.open();
 });
 
-addTodoCloseBtn.addEventListener("click", () => {
-  closeModal(addTodoPopup);
-});
-
-addTodoForm.addEventListener("submit", (evt) => {
-  const name = evt.target.name.value;
-  const dateInput = evt.target.date.value;
-
-  // Create a date object and adjust for timezone
-  const date = new Date(dateInput);
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
-  const id = uuidv4();
-  const completed = false;
-
-  const values = { name, date, id, completed};
-  renderTodo(values);
-  addTodoValidator.resetValidation();
-  closeModal(addTodoPopup);
-});
-
-initialTodos.forEach((item) => {
-  renderTodo(item);
-});
+todoList.renderItems();

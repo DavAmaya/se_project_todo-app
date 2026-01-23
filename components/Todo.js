@@ -8,12 +8,13 @@
 */
 
 export class Todo {
-  constructor(data, selector) {
+  constructor(data, selector, todoCounter) {
     (this._id = data.id),
       (this._name = data.name),
       (this._completed = data.completed),
       (this._date = data.date);
     this._selector = selector;
+    this._todoCounter = todoCounter;
   }
 
   _getTemplate() {
@@ -28,10 +29,17 @@ export class Todo {
   _handleCheck = () => {
     this._completed = !this._completed;
     this._todoCheckbox.checked = this._completed;
+    if(this._todoCheckbox.checked){
+      this._todoCounter.updateCompleted(true);
+    }else {
+      this._todoCounter.updateCompleted(false);
+    }
   };
 
   _handleDelete = () => {
     this._todoElement.remove();
+    this._todoCounter.updateTotal(false);
+    this._todoCounter.updateCompleted(false);
   };
 
   _setEventListeners() {
@@ -69,6 +77,8 @@ export class Todo {
   _generateCheckboxEl() {
     this._todoCheckbox.id = `todo-${this._id}`;
     this._todoLabel.setAttribute("for", `todo-${this._id}`);
+      this._todoCheckbox.checked = this._completed;
+    
   }
 
   getView() {
