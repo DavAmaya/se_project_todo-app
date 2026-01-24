@@ -1,19 +1,12 @@
-import { validationConfig } from "../utils/constants.js";
-import { FormValidator } from "../components/FormValidator.js";
 import Popup from "./Popup.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
-
 export default class PopupWithForm extends Popup {
-  constructor(popupSelector, formSubmit) {
-    super(popupSelector);
+  constructor(popupElement, formSubmit) {
+    super(popupElement);
     this._formSubmit = formSubmit;
-    this._form = this._popupSelector.querySelector(".popup__form");
-    this._addTodoValidator = new FormValidator(
-      this._form,
-      validationConfig
-    );
-    this._addTodoValidator.enableValidation();
+    this._form = this._popupElement.querySelector(".popup__form");
+    this.setEventListeners();
   }
 
   _getInputValues(evtTarget) {
@@ -37,11 +30,10 @@ export default class PopupWithForm extends Popup {
 
       const inputs = this._getInputValues(evt.target);
 
-      const values = { ...inputs, id, completed };
+      const values = { id, ...inputs, completed };
 
       this._formSubmit(values);
 
-      this._addTodoValidator.resetValidation();
       super.close();
     });
   }

@@ -24,7 +24,7 @@
   cursor: pointer;
 }
 
-.todo__completed:hover{
+.todo__completed:hover {
   border: 1px solid #1818187a;
 }
 
@@ -74,7 +74,7 @@
   cursor: pointer;
 }
 
-.todo__delete-btn:hover{
+.todo__delete-btn:hover {
   opacity: 0.4;
 }
 

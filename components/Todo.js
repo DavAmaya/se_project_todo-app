@@ -8,13 +8,11 @@
 */
 
 export class Todo {
-  constructor(data, selector, todoCounter) {
-    (this._id = data.id),
-      (this._name = data.name),
-      (this._completed = data.completed),
-      (this._date = data.date);
+  constructor({ data, onCheck, onDelete }, selector) {
+    this._data = data;
     this._selector = selector;
-    this._todoCounter = todoCounter;
+    this._onCheck = onCheck;
+    this._onDelete = onDelete;
   }
 
   _getTemplate() {
@@ -27,19 +25,14 @@ export class Todo {
   }
 
   _handleCheck = () => {
-    this._completed = !this._completed;
-    this._todoCheckbox.checked = this._completed;
-    if(this._todoCheckbox.checked){
-      this._todoCounter.updateCompleted(true);
-    }else {
-      this._todoCounter.updateCompleted(false);
-    }
+    this._data.completed = !this._data.completed;
+    this._todoCheckbox.checked = this._data.completed;
+    this._onCheck(this._todoCheckbox.checked);
   };
 
   _handleDelete = () => {
     this._todoElement.remove();
-    this._todoCounter.updateTotal(false);
-    this._todoCounter.updateCompleted(false);
+    this._onDelete();
   };
 
   _setEventListeners() {
@@ -60,11 +53,11 @@ export class Todo {
     this._todoDate = this._todoElement.querySelector(".todo__date");
     this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
 
-    this._todoName.textContent = this._name;
+    this._todoName.textContent = this._data.name;
   }
 
   _generateDateEl() {
-    const dueDate = new Date(this._date);
+    const dueDate = new Date(this._data.date);
     if (!isNaN(dueDate)) {
       this._todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
         year: "numeric",
@@ -75,10 +68,9 @@ export class Todo {
   }
 
   _generateCheckboxEl() {
-    this._todoCheckbox.id = `todo-${this._id}`;
-    this._todoLabel.setAttribute("for", `todo-${this._id}`);
-      this._todoCheckbox.checked = this._completed;
-    
+    this._todoCheckbox.id = `todo-${this._data.id}`;
+    this._todoLabel.setAttribute("for", `todo-${this._data.id}`);
+    this._todoCheckbox.checked = this._data.completed;
   }
 
   getView() {
@@ -89,5 +81,4 @@ export class Todo {
     this._setEventListeners();
     return this._todoElement;
   }
-
 }

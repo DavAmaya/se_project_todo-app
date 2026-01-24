@@ -1,22 +1,50 @@
-import { initialTodos, addTodoPopup, addTodoButton } from "../utils/constants.js";
+import {
+  initialTodos,
+  addTodoPopup,
+  addTodoButton,
+  form,
+  validationConfig,
+} from "../utils/constants.js";
 import { Todo } from "../components/Todo.js";
 import PopupWithForm from "../components/PopupWithForm.js";
-import Section  from "../components/Section.js"
+import Section from "../components/Section.js";
 import TodoCounter from "../components/TodoCounter.js";
+import { FormValidator } from "../components/FormValidator.js";
 
 const todoCounter = new TodoCounter(initialTodos, ".counter__text");
 
-const todoList = new Section({
-  items: initialTodos,
-  renderer: (data) => {
-    const todosList = document.querySelector(".todos__list");
-    const todo = new Todo(data, "#todo-template", todoCounter);
-    todosList.append(todo.getView());
-  }
-}, ".todos__list", todoCounter);
+const addTodoValidator = new FormValidator(form, validationConfig);
 
+addTodoValidator.enableValidation();
 
-const addTodoForm = new PopupWithForm(addTodoPopup, (element) => todoList.addItem(element));
+const todoList = new Section(
+  {
+    items: initialTodos,
+    renderer: (data) => {
+      const todo = new Todo(
+        { data, onCheck: onCheck, onDelete: onDelete },
+        "#todo-template",
+      );
+      return todo;
+    },
+  },
+  ".todos__list",
+);
+
+const onCheck = (checked) => {
+  todoCounter.updateCompleted(checked);
+};
+
+const onDelete = () => {
+  todoCounter.updateTotal(false);
+};
+
+const addTodoForm = new PopupWithForm(addTodoPopup, (element) => {
+  console.log(element);
+  todoList.addItem(element);
+  todoCounter.updateTotal(true);
+  addTodoValidator.resetValidation();
+});
 
 addTodoButton.addEventListener("click", () => {
   addTodoForm.open();
