@@ -35,8 +35,11 @@ const onCheck = (checked) => {
   todoCounter.updateCompleted(checked);
 };
 
-const onDelete = () => {
+const onDelete = (completed) => {
   todoCounter.updateTotal(false);
+  if (completed) {
+    todoCounter.updateCompleted(false);
+  }
 };
 
 const addTodoForm = new PopupWithForm(addTodoPopup, (element) => {

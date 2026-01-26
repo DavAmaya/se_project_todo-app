@@ -32,7 +32,7 @@ export class Todo {
 
   _handleDelete = () => {
     this._todoElement.remove();
-    this._onDelete();
+    this._onDelete(this._data.completed);
   };
 
   _setEventListeners() {
